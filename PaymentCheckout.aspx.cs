@@ -7,14 +7,11 @@ using System.Web.UI.WebControls;
 
 namespace WEB_Ecom_ASP_DOT_NET
 {
-    public partial class Admin : System.Web.UI.MasterPage
+    public partial class PaymentCheckout : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (Session["AdminEmail"] == null)
-            {
-                Response.Redirect("Login_Page.aspx");
-            }
+
         }
     }
 }

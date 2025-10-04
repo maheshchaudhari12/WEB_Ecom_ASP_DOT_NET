@@ -181,6 +181,23 @@
             transform: translateX(0);
         }
 
+        /* Custom tooltip styling for sidebar */
+        .tooltip {
+            font-size: 0.875rem;
+        }
+
+        .tooltip-inner {
+            background-color: #1e293b;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .tooltip.bs-tooltip-end .tooltip-arrow::before {
+            border-right-color: #1e293b;
+        }
+
         /* Main Content */
         .main-content {
             margin-left: var(--sidebar-width);
@@ -357,13 +374,12 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
                         <i class="fas fa-user-circle me-1"></i>
-                        <span class="d-none d-sm-inline">Admin User</span>
+                        <span class="d-none d-sm-inline"><%=Session["UserRole"].ToString()%></span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Settings</a></li>
-                        <li><a class="dropdown-item" href="#"><i class="fas fa-history me-2"></i>Activity Log</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i><%=Session["AdminEmail"] %></a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                        <li><a class="dropdown-item text-danger" href="Logout.aspx"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
                     </ul>
                 </li>
             </ul>
@@ -380,32 +396,53 @@
                 <i class="fas fa-tachometer-alt me-2"></i>
                 <span>Admin Panel</span>
             </div>
-            <button class="sidebar-toggle" id="sidebarToggle">
+            <button class="sidebar-toggle" id="sidebarToggle" 
+                    data-bs-toggle="tooltip" 
+                    data-bs-placement="right" 
+                    data-bs-title="Collapse Sidebar">
                 <i class="fas fa-angle-left"></i>
             </button>
         </div>
         <nav class="sidebar-nav">
-            <a class="active" href="AdminHome.aspx">
+            <a class="active" href="AdminHome.aspx" 
+               data-bs-toggle="tooltip" 
+               data-bs-placement="right" 
+               data-bs-title="Dashboard">
                 <i class="fas fa-columns"></i>
                 <span>Dashboard</span>
             </a>
-            <a href="RegisteredUser.aspx">
-                <i class="fas fa-chart-line"></i>
+            <a href="RegisteredUser.aspx"
+               data-bs-toggle="tooltip" 
+               data-bs-placement="right" 
+               data-bs-title="View Registered Users">
+                <i class="fas fa-users"></i>
                 <span>Registered User</span>
             </a>
-            <a href="AddProduct.aspx">
-                <i class="fas fa-users"></i>
+            <a href="AddProduct.aspx"
+               data-bs-toggle="tooltip" 
+               data-bs-placement="right" 
+               data-bs-title="Add New Products">
+                <i class="fas fa-plus-circle"></i>
                 <span>Add Products</span>
             </a>
-            <a href="ProductTable.aspx">
+            <a href="ProductTable.aspx"
+               data-bs-toggle="tooltip" 
+               data-bs-placement="right" 
+               data-bs-title="Manage Products">
                 <i class="fas fa-box"></i>
                 <span>Products Table</span>
             </a>
-            <a href="#">
+            <a href="#"
+               data-bs-toggle="tooltip" 
+               data-bs-placement="right" 
+               data-bs-title="Orders & Billing">
                 <i class="fas fa-file-invoice-dollar"></i>
                 <span>Orders & Billing</span>
             </a>
-            <a href="#">
+            <a href="#"
+               data-bs-toggle="tooltip" 
+               data-bs-placement="right" 
+               data-bs-title="View Notifications">
                 <i class="fas fa-bell"></i>
                 <span>Notifications</span>
             </a>
@@ -419,7 +456,7 @@
     </div>
 
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             const sidebar = $('#sidebar');
             const mainContent = $('#mainContent');
             const navbar = $('.navbar');
@@ -428,36 +465,72 @@
             const mobileMenuToggle = $('#mobileMenuToggle');
             const toggleIcon = sidebarToggle.find('i');
 
+            // Initialize all tooltips
+            const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+            const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+
+            // Function to enable/disable tooltips based on sidebar state
+            function updateTooltips() {
+                tooltipTriggerList.forEach((element) => {
+                    const tooltip = bootstrap.Tooltip.getInstance(element);
+                    if (sidebar.hasClass('collapsed')) {
+                        // Enable tooltips when sidebar is collapsed
+                        if (tooltip) {
+                            tooltip.enable();
+                        }
+                    } else {
+                        // Disable tooltips when sidebar is expanded (except toggle button)
+                        if (tooltip && element.id !== 'sidebarToggle') {
+                            tooltip.disable();
+                        }
+                    }
+                });
+            }
+
+            // Initial tooltip state
+            updateTooltips();
+
             // Desktop sidebar toggle
-            sidebarToggle.on('click', function() {
+            sidebarToggle.on('click', function () {
                 sidebar.toggleClass('collapsed');
                 mainContent.toggleClass('sidebar-collapsed');
-                
+
                 if (sidebar.hasClass('collapsed')) {
                     navbar.removeClass('sidebar-expanded').addClass('sidebar-collapsed');
                     toggleIcon.removeClass('fa-angle-left').addClass('fa-angle-right');
+                    sidebarToggle.attr('data-bs-title', 'Expand Sidebar');
                 } else {
                     navbar.removeClass('sidebar-collapsed').addClass('sidebar-expanded');
                     toggleIcon.removeClass('fa-angle-right').addClass('fa-angle-left');
+                    sidebarToggle.attr('data-bs-title', 'Collapse Sidebar');
                 }
+
+                // Update tooltip text
+                const toggleTooltip = bootstrap.Tooltip.getInstance(sidebarToggle[0]);
+                if (toggleTooltip) {
+                    toggleTooltip.setContent({ '.tooltip-inner': sidebarToggle.attr('data-bs-title') });
+                }
+
+                // Update tooltips state
+                updateTooltips();
             });
 
             // Mobile menu toggle
-            mobileMenuToggle.on('click', function() {
+            mobileMenuToggle.on('click', function () {
                 sidebar.addClass('show');
                 sidebarOverlay.addClass('show');
                 $('body').css('overflow', 'hidden');
             });
 
             // Close sidebar on overlay click
-            sidebarOverlay.on('click', function() {
+            sidebarOverlay.on('click', function () {
                 sidebar.removeClass('show');
                 sidebarOverlay.removeClass('show');
                 $('body').css('overflow', '');
             });
 
             // Close sidebar on mobile when link is clicked
-            $('.sidebar-nav a').on('click', function() {
+            $('.sidebar-nav a').on('click', function () {
                 if ($(window).width() < 992) {
                     sidebar.removeClass('show');
                     sidebarOverlay.removeClass('show');
@@ -466,13 +539,24 @@
             });
 
             // Handle window resize
-            $(window).on('resize', function() {
+            $(window).on('resize', function () {
                 if ($(window).width() >= 992) {
                     sidebar.removeClass('show');
                     sidebarOverlay.removeClass('show');
                     $('body').css('overflow', '');
                 }
+                updateTooltips();
             });
+
+            // Disable tooltips on mobile
+            if ($(window).width() < 992) {
+                tooltipTriggerList.forEach((element) => {
+                    const tooltip = bootstrap.Tooltip.getInstance(element);
+                    if (tooltip) {
+                        tooltip.disable();
+                    }
+                });
+            }
         });
     </script>
 </body>

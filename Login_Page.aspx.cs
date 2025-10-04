@@ -25,15 +25,15 @@ namespace WEB_Ecom_ASP_DOT_NET
 
             if (email == adminEmail && password == adminPassword)
             {
-                // Redirect to admin page
+                Session["AdminEmail"] = adminEmail;
+                Session["UserRole"] = "Admin";
+
                 Response.Redirect("AdminPanel.aspx");
                 return;
             }
 
             string connectionString = ConfigurationManager.ConnectionStrings["SQL_SERVER"].ConnectionString;
 
-
-            // Example using ADO.NET
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 string query = "SELECT COUNT(*) FROM Users WHERE Email = @Email AND Password = @Password";
@@ -46,6 +46,10 @@ namespace WEB_Ecom_ASP_DOT_NET
 
                 if (count == 1)
                 {
+                    
+                    Session["UserEmail"] = email;
+                    Session["UserRole"] = "User";
+
                     Response.Redirect("Index.aspx");
                 }
                 else
@@ -53,7 +57,7 @@ namespace WEB_Ecom_ASP_DOT_NET
                     Response.Write("<script>alert('Invalid credentials.');</script>");
                 }
             }
-
         }
+
     }
 }

@@ -7,14 +7,14 @@ using System.Web.UI.WebControls;
 
 namespace WEB_Ecom_ASP_DOT_NET
 {
-    public partial class Admin : System.Web.UI.MasterPage
+    public partial class Logout : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (Session["AdminEmail"] == null)
-            {
-                Response.Redirect("Login_Page.aspx");
-            }
+            Session.Clear();
+            Session.Abandon();
+
+            Response.Redirect("Index.aspx");
         }
     }
 }

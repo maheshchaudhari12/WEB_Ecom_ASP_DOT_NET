@@ -70,8 +70,11 @@
     <Content Include="AddProduct.aspx" />
     <Content Include="AdminPanel.aspx" />
     <Content Include="CardsProducts.aspx" />
+    <Content Include="CartPage.aspx" />
     <Content Include="Index.aspx" />
     <Content Include="Login_Page.aspx" />
+    <Content Include="Logout.aspx" />
+    <Content Include="PaymentCheckout.aspx" />
     <Content Include="ProductTable.aspx" />
     <Content Include="RegisteredUser.aspx" />
     <Content Include="SignUp.aspx" />
@@ -106,6 +109,14 @@
     <Compile Include="CardsProducts.aspx.designer.cs">
       <DependentUpon>CardsProducts.aspx</DependentUpon>
     </Compile>
+    <Compile Include="CartHelper.cs" />
+    <Compile Include="CartPage.aspx.cs">
+      <DependentUpon>CartPage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CartPage.aspx.designer.cs">
+      <DependentUpon>CartPage.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Home_Page.Master.cs">
       <DependentUpon>Home_Page.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -126,6 +137,20 @@
     </Compile>
     <Compile Include="Login_Page.aspx.designer.cs">
       <DependentUpon>Login_Page.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Logout.aspx.cs">
+      <DependentUpon>Logout.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Logout.aspx.designer.cs">
+      <DependentUpon>Logout.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PaymentCheckout.aspx.cs">
+      <DependentUpon>PaymentCheckout.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PaymentCheckout.aspx.designer.cs">
+      <DependentUpon>PaymentCheckout.aspx</DependentUpon>
     </Compile>
     <Compile Include="ProductTable.aspx.cs">
       <DependentUpon>ProductTable.aspx</DependentUpon>

@@ -28,9 +28,9 @@
                 <label for="ddlCategory" class="form-label">Category</label>
                 <asp:DropDownList ID="ddlCategory" runat="server" CssClass="form-select">
                     <asp:ListItem Text="Select Category" Value="" />
-                    <asp:ListItem Text="Electronics" Value="Electronics" />
-                    <asp:ListItem Text="Clothing" Value="Clothing" />
-                    <asp:ListItem Text="Books" Value="Books" />
+                    <asp:ListItem Text="Computers" Value="Electronics" />
+                    <asp:ListItem Text="Smartphones" Value="Clothing" />
+                    <asp:ListItem Text="HardWare" Value="Books" />
                     <asp:ListItem Text="Home & Kitchen" Value="Home & Kitchen" />
                     <asp:ListItem Text="Beauty" Value="Beauty" />
                 </asp:DropDownList>
